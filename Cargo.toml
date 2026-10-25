@@ -1,0 +1,24 @@
+[package]
+name = "stock_streamer"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+rand = "0.10"
+ctrlc = "3"
+log = "0.4"
+env_logger = "0.11"
+clap = { version = "4", features = ["derive"] }
+
+[lib]
+name = "stock_streamer"
+path = "src/lib.rs"
+
+
+[[bin]]
+name = "server"
+path = "src/bin/server.rs"
+
+[[bin]]
+name = "client"
+path = "src/bin/client.rs"

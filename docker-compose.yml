@@ -1,0 +1,47 @@
+services:
+  server:
+    build: .
+    image: stock-streamer
+    container_name: stock-server
+    entrypoint: ["/usr/local/bin/server"]
+    command: ["--bind-addr", "0.0.0.0:34254"]
+    ports:
+      - "34254:34254/tcp"
+      - "34254:34254/udp"
+    environment:
+      RUST_LOG: "info"
+    networks: [stocknet]
+
+  client1:
+    image: stock-streamer
+    container_name: stock-client1
+    entrypoint: ["/usr/local/bin/client"]
+    command: ["--server-addr", "server:34254", "--udp-port", "9001", "--tickers-file", "/app/tickers.txt"]
+    volumes:
+      - ./assets/tickers.txt:/app/tickers.txt:ro
+    depends_on: [server]
+    networks: [stocknet]
+
+  client2:
+    image: stock-streamer
+    container_name: stock-client2
+    entrypoint: ["/usr/local/bin/client"]
+    command: ["--server-addr", "server:34254", "--udp-port", "9002", "--tickers-file", "/app/tickers.txt"]
+    volumes:
+      - ./assets/tickers.txt:/app/tickers.txt:ro
+    depends_on: [server]
+    networks: [stocknet]
+
+  client3:
+    image: stock-streamer
+    container_name: stock-client3
+    entrypoint: ["/usr/local/bin/client"]
+    command: ["--server-addr", "server:34254", "--udp-port", "9003", "--tickers-file", "/app/tickers.txt"]
+    volumes:
+      - ./assets/tickers.txt:/app/tickers.txt:ro
+    depends_on: [server]
+    networks: [stocknet]
+
+networks:
+  stocknet:
+    driver: bridge
